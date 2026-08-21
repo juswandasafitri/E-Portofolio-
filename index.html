@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Portofolio PPG - Calon Guru</title>
+    <!-- Tailwind CSS for utility classes -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter for general text, Playfair Display for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-green: #8FBC8F; /* Dark Sea Green */
+            --soft-green: #E8F5E9; /* Very light green */
+            --accent-gold: #D4AF37; /* Metallic Gold for luxury touch */
+            --text-main: #2C3E50;
+            --text-light: #546E7A;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7; /* Slightly off-white for warmth */
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Aesthetic Background Elements */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.4;
+            background-image: 
+                radial-gradient(circle at 10% 20%, var(--soft-green) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, var(--soft-green) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, #f0fdf4 0%, transparent 50%);
+            background-size: cover;
+            pointer-events: none;
+        }
+
+        /* Subtle floral/leaf decorations */
+        .leaf-decoration {
+            position: absolute;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .leaf-1 { top: 5%; left: 2%; width: 150px; transform: rotate(-15deg); }
+        .leaf-2 { bottom: 10%; right: 2%; width: 200px; transform: rotate(15deg); }
+        
+        /* Glassmorphism for content cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(143, 188, 143, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(143, 188, 143, 0.15);
+        }
+
+        /* Navigation Styles */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(143, 188, 143, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--text-main);
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--primary-green);
+        }
+
+        /* Smooth section transitions */
+        .section-content {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-green); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #7ab07a; }
+
+        /* Fancy Headers */
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--text-main);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            bottom: -10px;
+            left: 25%;
+            background: linear-gradient(90deg, transparent, var(--primary-green), transparent);
+        }
+
+        /* Button styling */
+        .btn-custom {
+            background-color: var(--primary-green);
+            color: white;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .btn-custom:hover {
+            background-color: transparent;
+            color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <div class="bg-pattern"></div>
+    <!-- SVG placeholders for aesthetic leaves/butterflies -->
+    <svg class="leaf-decoration leaf-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#8FBC8F" d="M45.7,-76.1C58.9,-69.3,69,-55.4,77.3,-41.2C85.6,-27,92.1,-12.5,91.8,1.9C91.5,16.2,84.4,30.3,74.7,42.1C65,53.8,52.8,63.2,39.3,69.5C25.8,75.8,11.1,79.1,-3.5,84C-18.1,88.9,-32.7,95.3,-45.5,90.4C-58.3,85.5,-69.3,69.2,-77.3,53C-85.3,36.8,-90.4,20.7,-91.3,4.4C-92.2,-11.9,-88.9,-28.4,-80.7,-42.6C-72.5,-56.8,-59.4,-68.7,-45.1,-75.1C-30.8,-81.5,-15.4,-82.4,1.1,-84.1C17.6,-85.7,32.5,-82.9,45.7,-76.1Z" transform="translate(100 100)" />
+    </svg>
+    <svg class="leaf-decoration leaf-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#8FBC8F" d="M38.1,-62.7C52.2,-55.5,68.4,-49,76.6,-36.8C84.8,-24.6,85,-6.6,81,9.8C77,26.2,68.8,40.9,57.1,51.8C45.4,62.7,30.2,69.8,14.6,73.1C-1,76.4,-17,75.9,-32.4,70.9C-47.8,65.9,-62.6,56.4,-72.1,43.2C-81.6,30,-85.8,13.1,-84.6,-3.4C-83.4,-19.9,-76.8,-35.9,-65.8,-48.5C-54.8,-61.1,-39.4,-70.3,-24.5,-73.4C-9.6,-76.5,4.8,-73.5,18.5,-70Z" transform="translate(100 100)" />
+    </svg>
+
+    <nav class="fixed w-full z-50 py-4 px-6 md:px-12 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-4">
+            <!-- Logos placeholder -->
+            <div class="flex gap-2 bg-white p-1 rounded-lg shadow-sm border border-green-100">
+                <img src="https://placehold.co/40x40/8FBC8F/FFFFFF?text=UNM" alt="Logo UNM" class="h-10 w-10 rounded-full object-cover">
+                <img src="https://placehold.co/40x40/D4AF37/FFFFFF?text=PPG" alt="Logo PPG" class="h-10 w-10 rounded-full object-cover">
+            </div>
+            <div class="hidden md:block">
+                <h1 class="text-xl font-bold text-gray-800 leading-tight">E-Portofolio</h1>
+                <p class="text-xs text-green-700 font-medium">PPG Prajabatan</p>
+            </div>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex space-x-6 text-sm">
+            <a href="#" onclick="showSection('home')" class="nav-link active" data-target="home">Home</a>
+            <a href="#" onclick="showSection('identifikasi')" class="nav-link" data-target="identifikasi">Identifikasi Diri</a>
+            <a href="#" onclick="showSection('refleksi1')" class="nav-link" data-target="refleksi1">Refleksi Smt 1</a>
+            <a href="#" onclick="showSection('refleksi2')" class="nav-link" data-target="refleksi2">Refleksi Smt 2</a>
+            <a href="#" onclick="showSection('refleksi-keseluruhan')" class="nav-link" data-target="refleksi-keseluruhan">Refleksi Keseluruhan</a>
+            <a href="#" onclick="showSection('inovasi')" class="nav-link" data-target="inovasi">Inovasi</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="lg:hidden text-gray-700 focus:outline-none" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobileMenu" class="hidden fixed top-[72px] left-0 w-full bg-white z-40 shadow-lg border-t border-green-100 flex-col py-4 px-6 gap-4">
+         <a href="#" onclick="showSection('home'); toggleMobileMenu()" class="text-gray-700 hover:text-green-600 border-b border-gray-100 pb-2">Home</a>
+         <a href="#" onclick="showSection('identifikasi'); toggleMobileMenu()" class="text-gray-700 hover:text-green-600 border-b border-gray-100 pb-2">Identifikasi Diri</a>
+         <a href="#" onclick="showSection('refleksi1'); toggleMobileMenu()" class="text-gray-700 hover:text-green-600 border-b border-gray-100 pb-2">Refleksi Semester 1</a>
+         <a href="#" onclick="showSection('refleksi2'); toggleMobileMenu()" class="text-gray-700 hover:text-green-600 border-b border-gray-100 pb-2">Refleksi Semester 2</a>
+         <a href="#" onclick="showSection('refleksi-keseluruhan'); toggleMobileMenu()" class="text-gray-700 hover:text-green-600 border-b border-gray-100 pb-2">Refleksi Keseluruhan</a>
+         <a href="#" onclick="showSection('inovasi'); toggleMobileMenu()" class="text-gray-700 hover:text-green-600 border-b border-gray-100 pb-2">Inovasi Terbaru</a>
+    </div>
+
+    <main class="flex-grow pt-28 pb-16 px-4 md:px-12 max-w-6xl mx-auto w-full relative z-10">
+
+        <!-- ==================== HOME SECTION ==================== -->
+        <section id="home" class="section-content active">
+            <div class="glass-card p-8 md:p-12 text-center relative overflow-hidden">
+                <!-- Aesthetic background blur within card -->
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+                <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-yellow-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+                
+                <div class="relative z-10 flex flex-col items-center">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-800 leading-tight">
+                        E-Portofolio<br>
+                        <span class="text-green-700 text-2xl md:text-3xl">Seminar Pendidikan Profesi Guru</span>
+                    </h1>
+                    
+                    <div class="w-24 h-1 bg-green-500 rounded-full my-6"></div>
+
+                    <!-- Profile Area -->
+                    <div class="mt-4 flex flex-col items-center">
+                        <div class="relative">
+                            <div class="w-40 h-40 md:w-48 md:h-48 rounded-full p-2 border-4 border-green-200 bg-white shadow-xl mb-6">
+                                <img src="https://placehold.co/400x400/8FBC8F/FFFFFF?text=Foto+Profil" alt="Foto Mahasiswa" class="w-full h-full object-cover rounded-full">
+                            </div>
+                            <!-- Small decorative icon -->
+                            <div class="absolute bottom-8 right-2 bg-yellow-400 text-white w-10 h-10 rounded-full flex items-center justify-center border-4 border-white shadow-md">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                        </div>
+
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Nama Lengkap Mahasiswa</h2>
+                        <p class="text-lg text-gray-600 mb-6 italic">Calon Guru Profesional</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl text-left bg-white/60 p-6 rounded-2xl border border-white/40">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-green-100 p-2 rounded-lg text-green-700"><i class="fas fa-book w-5 text-center"></i></div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-semibold uppercase">Program Studi</p>
+                                    <p class="font-medium text-gray-800">Pendidikan Biologi / Matematika / dll</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="bg-green-100 p-2 rounded-lg text-green-700"><i class="fas fa-university w-5 text-center"></i></div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-semibold uppercase">LPTK</p>
+                                    <p class="font-medium text-gray-800">Universitas Negeri Makassar</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 md:col-span-2">
+                                <div class="bg-green-100 p-2 rounded-lg text-green-700"><i class="fas fa-school w-5 text-center"></i></div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-semibold uppercase">Tempat PPL</p>
+                                    <p class="font-medium text-gray-800">SMA Negeri 1 Makassar (Contoh)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table of Contents / Quick Links -->
+                    <div class="mt-12 w-full max-w-3xl">
+                        <h3 class="serif-font text-2xl font-semibold mb-6 text-gray-800 border-b border-gray-200 pb-2">Daftar Isi Portofolio</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button onclick="showSection('identifikasi')" class="glass-card p-4 text-left hover:bg-green-50 flex items-center justify-between group">
+                                <span class="font-medium text-gray-700 group-hover:text-green-700 transition-colors">Identifikasi Diri</span>
+                                <i class="fas fa-arrow-right text-gray-300 group-hover:text-green-500 transition-colors"></i>
+                            </button>
+                            <button onclick="showSection('refleksi1')" class="glass-card p-4 text-left hover:bg-green-50 flex items-center justify-between group">
+                                <span class="font-medium text-gray-700 group-hover:text-green-700 transition-colors">Refleksi Semester 1</span>
+                                <i class="fas fa-arrow-right text-gray-300 group-hover:text-green-500 transition-colors"></i>
+                            </button>
+                            <button onclick="showSection('refleksi2')" class="glass-card p-4 text-left hover:bg-green-50 flex items-center justify-between group">
+                                <span class="font-medium text-gray-700 group-hover:text-green-700 transition-colors">Refleksi Semester 2</span>
+                                <i class="fas fa-arrow-right text-gray-300 group-hover:text-green-500 transition-colors"></i>
+                            </button>
+                            <button onclick="showSection('inovasi')" class="glass-card p-4 text-left hover:bg-green-50 flex items-center justify-between group">
+                                <span class="font-medium text-gray-700 group-hover:text-green-700 transition-colors">Inovasi Terbaru</span>
+                                <i class="fas fa-arrow-right text-gray-300 group-hover:text-green-500 transition-colors"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="identifikasi" class="section-content">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold section-title">Identifikasi Diri</h2>
+                <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Fondasi filosofis dan tujuan pergerakan saya sebagai pendidik di masa depan.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Visi Pendidikan -->
+                <div class="glass-card p-8 border-t-4 border-green-500">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-6 text-green-600 text-xl">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="serif-font text-xl font-bold text-gray-800 mb-4">Visi untuk Pendidikan</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm text-justify">
+                        "Mewujudkan ekosistem pendidikan yang inklusif, memerdekakan, dan berpusat pada peserta didik, di mana setiap anak bangsa memiliki kesempatan yang sama untuk mengembangkan potensi maksimalnya sesuai dengan kodrat alam dan zamannya, dilandasi nilai-nilai luhur Pancasila."
+                    </p>
+                </div>
+
+                <!-- Visi Guru -->
+                <div class="glass-card p-8 border-t-4 border-yellow-500">
+                    <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mb-6 text-yellow-600 text-xl">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="serif-font text-xl font-bold text-gray-800 mb-4">Visi Sebagai Calon Guru</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm text-justify">
+                        "Menjadi pendidik profesional yang reflektif, inovatif, dan berempati. Saya berkomitmen untuk tidak hanya mentransfer ilmu pengetahuan, tetapi juga menjadi fasilitator, teladan (ing ngarso sung tulodo), dan motivator yang menginspirasi siswa untuk menjadi pembelajar sepanjang hayat."
+                    </p>
+                </div>
+
+                <!-- Strategi -->
+                <div class="glass-card p-8 border-t-4 border-blue-500">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-6 text-blue-600 text-xl">
+                        <i class="fas fa-chess-knight"></i>
+                    </div>
+                    <h3 class="serif-font text-xl font-bold text-gray-800 mb-4">Strategi Mencapai Visi</h3>
+                    <ul class="text-gray-600 leading-relaxed text-sm space-y-3">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Menerapkan pembelajaran berdiferensiasi dan <em>Teaching at The Right Level</em> (TaRL).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Melakukan refleksi berkelanjutan secara konsisten.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Mengintegrasikan teknologi secara bermakna (TPACK).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <span>Membangun kolaborasi yang baik dengan teman sejawat, sekolah, dan orang tua.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="refleksi1" class="section-content">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold section-title">Refleksi Pembelajaran Semester 1</h2>
+                <p class="text-gray-600 mt-2">Jejak langkah pemahaman dan pengalaman klinis di awal masa pendidikan.</p>
+            </div>
+
+            <!-- Tabbed navigation for subjects -->
+            <div class="flex flex-wrap gap-2 justify-center mb-8">
+                <button onclick="openTab('mk1-1')" class="tab-btn active px-4 py-2 rounded-full text-sm font-medium transition-colors bg-green-600 text-white">Filosofi Pendidikan</button>
+                <button onclick="openTab('mk1-2')" class="tab-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-colors">Pemahaman Peserta Didik</button>
+                <button onclick="openTab('mk1-3')" class="tab-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-colors">Pembelajaran & Asesmen</button>
+                <button onclick="openTab('mk1-4')" class="tab-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-colors">PPL 1</button>
+                <button onclick="openTab('mk1-5')" class="tab-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-colors">Growth Mindset</button>
+                <button onclick="openTab('mk1-6')" class="tab-btn px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 transition-colors">Design Thinking</button>
+            </div>
+
+            <!-- Content for each Subject -->
+            <div class="glass-card p-6 md:p-10 relative">
+                <!-- Aesthetic decoration -->
+                <i class="fas fa-leaf absolute top-6 right-6 text-green-100 text-6xl opacity-30 transform -rotate-45"></i>
+
+                <!-- Mata Kuliah 1: Filosofi -->
+                <div id="mk1-1" class="tab-content block">
+                    <h3 class="serif-font text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                        <span class="bg-green-100 p-2 rounded-lg text-green-600 text-lg"><i class="fas fa-landmark"></i></span>
+                        Filosofi Pendidikan Indonesia
+                    </h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 border-l-4 border-green-500 pl-3 mb-2">1. Review Pengalaman Belajar</h4>
+                            <p class="text-sm text-gray-600 text-justify">Pada mata kuliah ini, saya mempelajari perjalanan pendidikan Indonesia dari masa kolonial hingga pemikiran Ki Hadjar Dewantara. Fokus utama adalah memahami konsep pendidikan yang "memerdekakan" dan menuntun segala kodrat yang ada pada anak.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 border-l-4 border-yellow-500 pl-3 mb-2">2. Refleksi Pengalaman Belajar (4C)</h4>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li><strong>Connection:</strong> Mengaitkan teori KHD dengan realita pendidikan saat ini.</li>
+                                <li><strong>Challenge:</strong> Menantang pandangan lama saya yang menganggap guru adalah pusat informasi (teacher-centered).</li>
+                                <li><strong>Concept:</strong> Konsep "Sistem Among" menjadi sangat penting.</li>
+                                <li><strong>Change:</strong> Perubahan mindset bahwa tugas utama saya adalah 'menuntun', bukan 'memaksa' anak sesuai kehendak saya.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 border-l-4 border-blue-500 pl-3 mb-2">3. Analisis Artefak Pembelajaran</h4>
+                            <p class="text-sm text-gray-600 mb-2">Artefak: Esai Argumen tentang Relevansi Pemikiran KHD.</p>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 text-center">
+                                <a href="#" class="text-green-600 hover:underline flex items-center justify-center gap-2">
+                                    <i class="fas fa-file-pdf text-red-500"></i> Lihat Artefak (PDF)
+                                </a>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 border-l-4 border-purple-500 pl-3 mb-2">4. Hasil Refleksi (Makna)</h4>
+                            <p class="text-sm text-gray-600 text-justify">Pembelajaran ini menyadarkan saya bahwa setiap anak unik. Pendidikan harus disesuaikan dengan kodrat alam dan zaman peserta didik agar mereka mencapai keselamatan dan kebahagiaan setinggi-tingginya.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template for other subjects (hidden by default) -->
+                <!-- MK 2 -->
+                <div id="mk1-2" class="tab-content hidden">
+                    <h3 class="serif-font text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                        <span class="bg-green-100 p-2 rounded-lg text-green-600 text-lg"><i class="fas fa-users"></i></span>
+                        Pemahaman Peserta Didik dan Pembelajarannya
+                    </h3>
+                    <p class="text-gray-500 italic mb-4">Mempelajari teori perkembangan, latar belakang, dan profil belajar peserta didik untuk merancang pembelajaran yang tepat sasaran.</p>
+                    <div class="space-y-6">
+                         <div>
+                            <h4 class="font-semibold text-gray-800 border-l-4 border-green-500 pl-3 mb-2">1. Review Pengalaman Belajar</h4>
+                            <p class="text-sm text-gray-600 text-justify">Fokus pada teori perkembangan kognitif (Piaget, Vygotsky), sosio-emosional, dan profil belajar. Belajar melakukan asesmen diagnostik awal.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 border-l-4 border-yellow-500 pl-3 mb-2">2. Refleksi Pengalaman Belajar (4C)</h4>
+                            <p class="text-sm text-gray-600">Menantang asumsi bahwa semua anak di kelas yang sama memiliki kesiapan belajar yang sama. Menyadari pentingnya profiling peserta didik.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 border-l-4 border-blue-500 pl-3 mb-2">3. Analisis Artefak Pembelajaran</h4>
+                            <p class="text-sm text-gray-600">Artefak: Laporan Observasi Profiling Peserta Didik di sekolah mitra.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 border-l-4 border-purple-500 pl-3 mb-2">4. Hasil Refleksi (Makna)</h4>
+                            <p class="text-sm text-gray-600 text-justify">Data observasi sangat krusial. Guru tidak bisa merancang strategi yang baik tanpa 'mengenal' siapa yang dihadapinya.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- MK 3 -->
+                <div id="mk1-3" class="tab-content hidden">
+                    <h3 class="serif-font text-2xl font-bold text-gray-800 mb-6">Pembelajaran Mendalam dan Asesmen Dasar</h3>
+                    <p class="text-gray-500 italic mb-4">Bagian ini memuat refleksi 4C, artefak, dan makna mengenai perancangan asesmen formatif, sumatif, dan rubrik penilaian.</p>
+                </div>
+                <!-- MK 4 -->
+                <div id="mk1-4" class="tab-content hidden">
+                    <h3 class="serif-font text-2xl font-bold text-gray-800 mb-6">Praktek Pengalaman Lapangan (PPL 1)</h3>
+                    <p class="text-gray-500 italic mb-4">Pengalaman klinis pertama ke sekolah. Observasi, asistensi mengajar, dan praktik terbimbing.</p>
+                </div>
+                <!-- MK 5 -->
+                <div id="mk1-5" class="tab-content hidden">
+                    <h3 class="serif-font text-2xl font-bold text-gray-800 mb-6">Growth Mindset</h3>
+                    <p class="text-gray-500 italic mb-4">Mengembangkan pola pikir berkembang, meyakini bahwa kemampuan dapat dilatih, dan kegagalan adalah ruang untuk belajar.</p>
+                </div>
+                <!-- MK 6 -->
+                <div id="mk1-6" class="tab-content hidden">
+                    <h3 class="serif-font text-2xl font-bold text-gray-800 mb-6">Design Thinking (MK Selektif)</h3>
+                    <p class="text-gray-500 italic mb-4">Memecahkan masalah pembelajaran melalui tahapan: Empathize, Define, Ideate, Prototype, Test.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="refleksi2" class="section-content">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold section-title">Refleksi Pembelajaran Semester 2</h2>
+                <p class="text-gray-600 mt-2">Simulasi klinis lanjutan dan pendalaman materi keprofesian.</p>
+            </div>
+            <div class="glass-card p-10 text-center">
+                <i class="fas fa-seedling text-5xl text-green-300 mb-4"></i>
+                <h3 class="serif-font text-xl font-bold text-gray-700">Dalam Proses Pembelajaran</h3>
+                <p class="text-gray-500 mt-2">Data refleksi untuk mata kuliah di semester 2 akan ditambahkan seiring berjalannya proses perkuliahan.</p>
+                
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 text-left max-w-2xl mx-auto">
+                    <div class="p-4 border border-gray-100 rounded-xl bg-white/50">
+                        <h4 class="font-semibold text-gray-800">Prinsip Pengajaran dan Asesmen (Lanjut)</h4>
+                        <p class="text-xs text-gray-500 mt-1">Review, 4C, Artefak, Hasil</p>
+                    </div>
+                    <div class="p-4 border border-gray-100 rounded-xl bg-white/50">
+                        <h4 class="font-semibold text-gray-800">PPL 2 (Praktik Mandiri)</h4>
+                        <p class="text-xs text-gray-500 mt-1">Review, 4C, Artefak, Hasil</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="refleksi-keseluruhan" class="section-content">
+             <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold section-title">Refleksi Keseluruhan</h2>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto text-lg">Sintesis perjalanan satu tahun penuh menjadi calon guru profesional, serta cetak biru langkah ke depan.</p>
+            </div>
+
+            <div class="glass-card p-10 md:p-14 mb-10 border-t-4 border-green-600">
+                <h3 class="serif-font text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <i class="fas fa-route text-green-600"></i> Pengalaman Belajar Selama PPG Prajabatan
+                </h3>
+                
+                <div class="space-y-6 text-gray-700 leading-relaxed text-justify">
+                    <p><span class="text-3xl font-bold text-green-700 float-left mr-2 mt-1 serif-font">P</span>erjalanan selama dua semester menempuh Pendidikan Profesi Guru Prajabatan ini merupakan fase dekonstruksi dan rekonstruksi intelektual serta emosional yang intensif bagi saya. Jika diibaratkan kepompong, PPG adalah fase metamorfosis. Saya masuk dengan membawa banyak 'miskonsepsi' warisan masa lalu—bahwa guru yang sukses adalah guru yang ditakuti murid, kelas yang baik adalah kelas yang senyap, dan evaluasi terbaik hanyalah soal pilihan ganda.</p>
+                    
+                    <p>Mata kuliah Filosofi Pendidikan dan Pemahaman Peserta Didik secara radikal membongkar tempurung tersebut. Saya disadarkan bahwa setiap individu di kelas memiliki hak penuh untuk dilayani pendidikannya sesuai dengan profil kognitif dan latar belakang sosio-kulturalnya. Proses PPL 1 kemudian menguji teori-teori idealis tersebut. Di lapangan, saya dibenturkan pada kenyataan fluktuasi motivasi siswa, keterbatasan waktu, dan beban administratif. Fase ini sempat memicu frustrasi, namun di sinilah letak pembelajaran esensialnya: kemampuan berefleksi.</p>
+
+                    <p>Memasuki semester 2 melalui PPA 2, PPL 2, dan Projek Kepemimpinan, kemandirian profesional saya ditempa. Saya tidak lagi sekadar meniru RPP, melainkan merancang *Backward Design* sendiri, mengimplementasikan *Teaching at The Right Level* secara presisi melalui diferensiasi, hingga melaksanakan Penelitian Tindakan Kelas (PTK) kolaboratif untuk memperbaiki kualitas pembelajaran secara empiris. Saya menemukan jati diri saya bukan lagi sekadar instruktur materi, melainkan fasilitator tumbuhnya kompetensi abad 21 pada diri peserta didik.</p>
+
+                    <div class="bg-green-50/80 p-8 rounded-2xl border border-green-100 my-8 shadow-inner text-center">
+                        <i class="fas fa-quote-left text-4xl text-green-300 mb-4 opacity-50"></i>
+                        <p class="text-xl font-medium text-gray-800 serif-font italic leading-relaxed max-w-4xl mx-auto">
+                            "Guru profesional bukanlah mereka yang tidak pernah melakukan kesalahan di kelas, melainkan mereka yang memiliki kelapangan dada dan ketajaman analisis untuk merefleksikan kesalahannya demi menciptakan pembelajaran esok hari yang lebih bermakna."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-10 md:p-14 border-t-4 border-blue-500">
+                <h3 class="serif-font text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <i class="fas fa-forward text-blue-600"></i> Rencana Tindak Lanjut (Cetak Biru Profesional)
+                </h3>
+                <p class="text-gray-700 text-justify mb-8">Lulus dari program PPG bukanlah garis akhir, melainkan garis awal pengabdian yang sesungguhnya. Untuk menjaga nyala api idealisme dan memastikan peningkatan kompetensi yang berkesinambungan, saya telah merumuskan Rencana Tindak Lanjut (RTL) pasca-PPG dalam tiga fase waktu tempuh:</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Jangka Pendek -->
+                    <div class="bg-white/80 p-6 rounded-2xl border border-blue-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-blue-300"></div>
+                        <h4 class="font-bold text-xl text-gray-800 mb-4 flex items-center gap-2">
+                            <span class="bg-blue-100 text-blue-700 text-sm py-1 px-3 rounded-full">Jangka Pendek</span>
+                        </h4>
+                        <ul class="space-y-3 text-sm text-gray-700 list-none pl-0">
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-500 mt-1"></i> Mendokumentasikan dan menyusun seluruh perangkat ajar, instrumen, dan media inovasi selama PPG ke dalam platform *cloud* yang sistematis.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-500 mt-1"></i> Bergabung dengan komunitas praktisi lokal/sekolah (MGMP/KKG) di tempat tugas pertama untuk beradaptasi dan membangun jejaring rekan sejawat (peer support).</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-500 mt-1"></i> Menerapkan rutinitas refleksi diri mingguan menggunakan Jurnal Refleksi model 4F (Facts, Feelings, Findings, Future).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Jangka Menengah -->
+                    <div class="bg-white/80 p-6 rounded-2xl border border-blue-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+                        <h4 class="font-bold text-xl text-gray-800 mb-4 flex items-center gap-2">
+                            <span class="bg-blue-100 text-blue-700 text-sm py-1 px-3 rounded-full">Jangka Menengah</span>
+                        </h4>
+                        <ul class="space-y-3 text-sm text-gray-700 list-none pl-0">
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-600 mt-1"></i> Mengembangkan penelitian (PTK) dari masalah di kelas baru, kemudian mengubahnya menjadi *Best Practice* untuk dipublikasikan pada seminar atau jurnal guru tingkat nasional.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-600 mt-1"></i> Mengikuti program Guru Penggerak (jika telah memenuhi syarat masa kerja) untuk memantapkan kompetensi kepemimpinan pembelajaran (Instructional Leadership).</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-600 mt-1"></i> Secara aktif mengikuti pelatihan penguasaan EdTech/AI terbaru agar pembelajaran selalu relevan dengan kodrat zaman siswa.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Jangka Panjang -->
+                    <div class="bg-white/80 p-6 rounded-2xl border border-blue-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-blue-700"></div>
+                        <h4 class="font-bold text-xl text-gray-800 mb-4 flex items-center gap-2">
+                            <span class="bg-blue-100 text-blue-700 text-sm py-1 px-3 rounded-full">Jangka Panjang</span>
+                        </h4>
+                        <ul class="space-y-3 text-sm text-gray-700 list-none pl-0">
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-800 mt-1"></i> Menjadi narasumber/fasilitator daerah bagi guru-guru lain dalam mengimplementasikan pembelajaran berdiferensiasi dan pendekatan CRT/TaRL.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-800 mt-1"></i> Melanjutkan studi ke jenjang Magister (S2) Pendidikan untuk memperkuat kerangka teoritis konseptual yang menopang praktik inovasi lapangan.</li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-blue-800 mt-1"></i> Menciptakan platform/media pembelajaran orisinil (hak cipta) berskala luas yang dapat diakses gratis oleh sekolah di daerah 3T.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="inovasi" class="section-content">
+             <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold section-title">Inovasi Pembelajaran</h2>
+                <p class="text-gray-600 mt-4 max-w-3xl mx-auto text-lg">Karya cipta transformatif, dirumuskan dari diagnosis akar masalah kelas (Design Thinking) dan disempurnakan melalui siklus refleksi PTK.</p>
+            </div>
+
+            <div class="glass-card p-8 mb-12 text-center bg-green-50/50">
+                <p class="text-gray-700 italic text-lg max-w-4xl mx-auto leading-relaxed">
+                    "Inovasi yang sejati di bidang pendidikan tidak selalu berupa penciptaan aplikasi berbiaya miliaran. Inovasi terhebat adalah sebuah strategi sederhana, namun tepat sasaran, yang mampu mengubah raut wajah kebingungan siswa menjadi binar mata pemahaman."
+                </p>
+                <div class="w-16 h-1 bg-green-400 mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            <div class="space-y-16">
+                <!-- Inovasi 1 - Detail Layout -->
+                <div class="glass-card overflow-hidden">
+                    <div class="flex flex-col lg:flex-row">
+                        <div class="lg:w-2/5 relative h-64 lg:h-auto">
+                            <img src="https://placehold.co/800x800/A5D6A7/FFFFFF?text=Bio-Escape+Room" alt="Inovasi 1" class="w-full h-full object-cover">
+                            <div class="absolute top-4 left-4 bg-green-600 text-white font-bold px-4 py-1 rounded-full shadow-lg">Inovasi 01</div>
+                        </div>
+                        <div class="lg:w-3/5 p-8 md:p-10">
+                            <h3 class="serif-font text-3xl font-bold text-gray-800 mb-2">Media Gamifikasi: "Edu-Escape Room" Digital</h3>
+                            <p class="text-green-600 font-semibold mb-6">Fokus: Peningkatan Motivasi Ekstrinsik & Literasi Kritis</p>
+                            
+                            <div class="space-y-4 text-sm text-gray-700 text-justify">
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Latar Belakang Masalah (Empathize):</strong>
+                                    <p>Berdasarkan observasi PPL 1, siswa cenderung pasif dan cepat bosan saat menghadapi materi teoritis yang padat. Tingkat membaca (literasi) modul instruksional sangat rendah. Siswa lebih tertarik berinteraksi dengan gadget untuk bermain game dibanding membaca teks e-book.</p>
+                                </div>
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Bentuk Inovasi (Ideate & Prototype):</strong>
+                                    <p>Saya mengembangkan media evaluasi dan literasi berformat "Escape Room" menggunakan integrasi Google Sites, Google Forms (dengan validation lock), dan Genially. Siswa dikelompokkan secara heterogen. Mereka terperangkap di ruang virtual dan hanya bisa maju ke ruangan berikutnya (level up) jika berhasil memecahkan teka-teki logika yang kunci jawabannya ada tersembunyi di dalam teks bacaan materi pelajaran.</p>
+                                </div>
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Hasil & Dampak (Test & Refleksi):</strong>
+                                    <p>Implementasi pada PPL 2 menunjukkan peningkatan dramatis pada keterlibatan (engagement). Kelompok yang biasanya diam kini berdebat memecahkan kode. Tingkat penyelesaian bacaan (reading completion rate) mencapai 90% karena membaca bukan lagi kewajiban, melainkan kebutuhan untuk memenangkan *game* (menyelinapkan literasi di dalam gamifikasi).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inovasi 2 - Detail Layout (Image Right) -->
+                <div class="glass-card overflow-hidden">
+                    <div class="flex flex-col lg:flex-row-reverse">
+                        <div class="lg:w-2/5 relative h-64 lg:h-auto">
+                            <img src="https://placehold.co/800x800/FFF59D/333333?text=Modul+Diferensiasi" alt="Inovasi 2" class="w-full h-full object-cover">
+                            <div class="absolute top-4 right-4 bg-yellow-500 text-white font-bold px-4 py-1 rounded-full shadow-lg">Inovasi 02</div>
+                        </div>
+                        <div class="lg:w-3/5 p-8 md:p-10">
+                            <h3 class="serif-font text-3xl font-bold text-gray-800 mb-2">Modul Ajar "Menu Board" Berdiferensiasi</h3>
+                            <p class="text-yellow-600 font-semibold mb-6">Fokus: Mengakomodasi Keragaman Gaya Belajar</p>
+                            
+                            <div class="space-y-4 text-sm text-gray-700 text-justify">
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Latar Belakang Masalah:</strong>
+                                    <p>Hasil asesmen diagnostik gaya belajar (VAK) menunjukkan kelas terbagi cukup merata antara visual, auditori, dan kinestetik. Modul LKS konvensional yang disediakan sekolah hanya berbasis teks tunggal (menghukum anak auditori dan kinestetik), berakibat pada gap hasil belajar yang curam.</p>
+                                </div>
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Bentuk Inovasi:</strong>
+                                    <p>Alih-alih memaksa semua anak mengerjakan LKS yang sama, saya mendesain konsep *Choice Board* (Papan Menu Pilihan). Untuk mencapai satu Tujuan Pembelajaran yang sama, siswa dipersilakan memilih "Menu Proses" (misal: belajar dari video animasi, podcast rekaman guru, atau kartu sortir fisik). Pada akhir sesi, siswa memilih "Menu Produk" untuk asesmen sumatif (membuat infografis, merekam presentasi suara, atau mind-map kreasi tangan).</p>
+                                </div>
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Hasil & Dampak:</strong>
+                                    <p>Terjadi lonjakan kepuasan emosional belajar siswa yang terekam dari kuesioner pasca-pembelajaran. Siswa merasa memegang kendali penuh (Student Agency) atas cara belajarnya. Angka ketuntasan klasikal naik dari 65% menjadi 88% pada siklus kedua penerapan PTK.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inovasi 3 - Detail Layout -->
+                <div class="glass-card overflow-hidden">
+                    <div class="flex flex-col lg:flex-row">
+                        <div class="lg:w-2/5 relative h-64 lg:h-auto">
+                            <img src="https://placehold.co/800x800/90CAF9/FFFFFF?text=Jurnal+Audio/Video" alt="Inovasi 3" class="w-full h-full object-cover">
+                            <div class="absolute top-4 left-4 bg-blue-500 text-white font-bold px-4 py-1 rounded-full shadow-lg">Inovasi 03</div>
+                        </div>
+                        <div class="lg:w-3/5 p-8 md:p-10">
+                            <h3 class="serif-font text-3xl font-bold text-gray-800 mb-2">Sistem Jurnal Refleksi Siswa Berbasis Multimedia (VoiceNotes & Vlog)</h3>
+                            <p class="text-blue-600 font-semibold mb-6">Fokus: Asesmen Formatif Inklusif dan Pemulihan Psikis (PSE)</p>
+                            
+                            <div class="space-y-4 text-sm text-gray-700 text-justify">
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Latar Belakang Masalah:</strong>
+                                    <p>Kegiatan penutup (refleksi/tiket keluar) seringkali hanya dilakukan secara lisan klasikal yang didominasi oleh segelintir siswa vokal, atau melalui selembar kertas yang diisi seadanya (asal selesai). Anak-anak pendiam yang mengalami kesulitan kognitif terpendam (miskonsepsi) sering luput dari jangkauan asesmen formatif harian ini.</p>
+                                </div>
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Bentuk Inovasi:</strong>
+                                    <p>Memanfaatkan platform Padlet/Wakelet atau fitur Voice Note grup WhatsApp yang dikhususkan (satu arah ke guru). Saya membebaskan siswa merefleksikan 3 hal (Apa yang dipelajari, apa yang membingungkan, bagaimana perasaan hari ini) dengan cara merekam suara mereka atau video pendek diri (Vlog), dan bukan menulis. Ini menghilangkan *barrier* ketakutan salah eja bagi sebagian anak.</p>
+                                </div>
+                                <div>
+                                    <strong class="text-gray-800 block mb-1">Hasil & Dampak:</strong>
+                                    <p>Kuantitas dan kejujuran refleksi meningkat tajam. Sangat mengejutkan mendengar curhatan jujur siswa lewat audio tentang apa yang tidak ia pahami, yang mana hal itu tak berani ia utarakan di kelas secara langsung. Inovasi sederhana ini membangun kedekatan emosional luar biasa antara saya dan siswa (membangun *Trust* dalam PSE).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-auto relative w-full text-center py-12 px-4">
+        <!-- Top border gradient -->
+        <div class="absolute top-0 left-1/4 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-green-400 to-transparent"></div>
+        
+        <div class="max-w-2xl mx-auto glass-card p-8">
+            <h2 class="serif-font text-2xl font-bold text-gray-800 mb-4">Terima Kasih</h2>
+            <p class="text-gray-600 italic text-sm mb-6">
+                "Terima kasih kepada dosen pengampu, guru pamong, rekan sejawat, dan semua pihak yang telah menjadi bagian dari proses bertumbuh ini."
+            </p>
+            <div class="inline-block p-4 bg-green-50 rounded-xl border border-green-100">
+                <p class="font-semibold text-green-800">
+                    Mendidik adalah menyemai benih masa depan. <br>
+                    Teruslah belajar, karena guru yang berhenti belajar harus berhenti mengajar.
+                </p>
+            </div>
+            
+            <p class="text-xs text-gray-400 mt-8">&copy; 2026 E-Portofolio Calon Guru Profesional. Universitas Negeri Makassar.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation Logic
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section-content');
+            sections.forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update Desktop Nav Active State
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('data-target') === sectionId) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
+        }
+
+        // Tabs Logic for Refleksi Subjects
+        function openTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('block');
+            });
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active', 'bg-green-600', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-600');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('block');
+
+            // Add active class to clicked button
+            event.target.classList.add('active', 'bg-green-600', 'text-white');
+            event.target.classList.remove('bg-white', 'text-gray-600');
+        }
+    </script>
+</body>
+</html>
